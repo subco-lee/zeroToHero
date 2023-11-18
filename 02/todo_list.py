@@ -2,8 +2,8 @@ import time
 
 
 class Task:
-    def __init__(self, id, title, content, done):
-        self.id = id
+    def __init__(self, _id, title, content, done):
+        self.id = _id
         self.title = title
         self.content = content
         self.done = done
@@ -14,7 +14,7 @@ class Task:
 
     def toggle_done(self):
         self.done = not self.done
-        if (self.done):
+        if self.done:
             print("완료로 변경되었습니다.\n")
         else:
             print("미완료로 변경되었습니다.\n")
@@ -23,9 +23,9 @@ class Task:
 def __main__():
     todos = {}
 
-    def add_task(id, title, content):
-        new_task = Task(id, title, content, False)
-        todos[id] = new_task
+    def add_task(_id, _title, _content):
+        new_task = Task(_id, _title, _content, False)
+        todos[_id] = new_task
 
     def get_todo_list():
         print("---------Todos---------")
@@ -34,21 +34,21 @@ def __main__():
             print("\n")
         print("-----------------------")
 
-    def delete_task(id):
-        del todos[id]
+    def delete_task(_id):
+        del todos[_id]
 
-    def toggle_done(id):
-        todos[id].toggle_done()
+    def toggle_done(_id):
+        todos[_id].toggle_done()
 
-    while (True):
+    while True:
         print("하고 싶은 일을 번호를 선택하세요!\n")
         print("1 - 할일 추가\n2 - 할일 조회하기\n3 - 할일 삭제하기\n4 - 완료 상태 토글하기")
         choice = int(input())
         if choice == 1:
-            id = str(time.time()).split(".")[0]
+            _id = str(time.time()).split(".")[0]
             title = input("할 일의 제목을 입력해주세요: ")
             content = input("할 일의 내용을 입력해주세요: ")
-            add_task(id, title, content)
+            add_task(_id, title, content)
 
             print("할 일이 추가되었습니다!\n")
 
