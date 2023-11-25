@@ -1,4 +1,4 @@
-from my_db import create_db, init_db, delete_task, create_task, read_task, update_done
+from db import create_db, init_db, delete_task, create_task, read_task, update_task
 
 
 def __main__():
@@ -13,9 +13,10 @@ def __main__():
         print("할 일이 추가되었습니다!\n")
 
     def get_todo_list():
+        todos = read_task(con)
         print("---------Todos---------")
-        for value in read_task(con):
-            value.print_self()
+        for todo in todos:
+            todo.print_self()
             print("\n")
         print("-----------------------")
 
@@ -25,7 +26,7 @@ def __main__():
 
     def toggle_done():
         target_id = input("완료 상태를 토글할 할 일의 Id 를 입력해주세요: ")
-        update_done(con, target_id)
+        update_task(con, target_id)
 
     while True:
         print("하고 싶은 일을 번호를 선택하세요!\n")

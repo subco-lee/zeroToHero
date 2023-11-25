@@ -21,6 +21,7 @@ def init_db(con: sqlite3.Connection):
     cursor.close()
 
 
+
 def create_task(con: sqlite3.Connection, title: str, content: str):
     cursor = con.cursor()
     cursor.execute(f'''
@@ -38,17 +39,29 @@ def read_task(con: sqlite3.Connection):
     ''')
     todos = cursor.fetchall()
     cursor.close()
-    todos = [Task(*todo) for todo in todos]
-    return todos
+    tasks = [Task(todo) for todo in todos]
+    return tasks
 
 
-def update_done(con: sqlite3.Connection, _id: int):
+def update_task(con: sqlite3.Connection, _id: int):
     cursor = con.cursor()
     cursor.execute(f'''
-        UPDATE {MY_TODO_TABLE}
-        SET done = NOT done
+        SELECT * FROM {MY_TODO_TABLE}
         WHERE id = {_id}
     ''')
+    todo = cursor.fetchone()
+
+    if todo is None:
+        print("잘못된 id 입니다.")
+        return
+    else:
+        task = Task(todo)
+        new_done_status = True if task.done == False else False
+        cursor.execute(f'''
+            UPDATE {MY_TODO_TABLE}
+            SET done = {new_done_status}
+            WHERE id = {_id}
+        ''')
     cursor.close()
     con.commit()
 
