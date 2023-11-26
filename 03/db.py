@@ -3,7 +3,6 @@ import sqlite3
 
 MY_TODO_TABLE = 'TODO_LIST'
 
-
 def create_db():
     con = sqlite3.connect('./todos.db')
     return con
@@ -20,8 +19,6 @@ def init_db(con: sqlite3.Connection):
         )''')
     cursor.close()
 
-
-
 def create_task(con: sqlite3.Connection, title: str, content: str):
     cursor = con.cursor()
     cursor.execute(f'''
@@ -32,22 +29,22 @@ def create_task(con: sqlite3.Connection, title: str, content: str):
     con.commit()
 
 
-def read_task(con: sqlite3.Connection):
+def read_task(con: sqlite3.Connection) -> list[Task]:
     cursor = con.cursor()
     cursor.execute(f'''
-        SELECT * FROM {MY_TODO_TABLE}
+        SELECT id, title, content, done FROM {MY_TODO_TABLE}
     ''')
     todos = cursor.fetchall()
     cursor.close()
-    tasks = [Task(todo) for todo in todos]
+    tasks = [Task(todo[0], todo[1], todo[2], todo[3]) for todo in todos]
     return tasks
 
 
-def update_task(con: sqlite3.Connection, _id: int):
+def update_task(con: sqlite3.Connection, id_: int):
     cursor = con.cursor()
     cursor.execute(f'''
-        SELECT * FROM {MY_TODO_TABLE}
-        WHERE id = {_id}
+        SELECT id, title, content, done FROM {MY_TODO_TABLE}
+        WHERE id = {id_}
     ''')
     todo = cursor.fetchone()
 
@@ -56,21 +53,21 @@ def update_task(con: sqlite3.Connection, _id: int):
         return
     else:
         task = Task(todo)
-        new_done_status = True if task.done == False else False
+        new_done_status = not task.done
         cursor.execute(f'''
             UPDATE {MY_TODO_TABLE}
             SET done = {new_done_status}
-            WHERE id = {_id}
+            WHERE id = {id_}
         ''')
     cursor.close()
     con.commit()
 
 
-def delete_task(con: sqlite3.Connection, _id: int):
+def delete_task(con: sqlite3.Connection, id_: int):
     cursor = con.cursor()
     cursor.execute(f'''
         DELETE FROM {MY_TODO_TABLE}
-        WHERE id = {_id}
+        WHERE id = {id_}
     ''')
     cursor.close()
     con.commit()
