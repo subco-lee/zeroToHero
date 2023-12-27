@@ -5,7 +5,7 @@ from models import Task
 from schemas import TaskCreate
 
 def create_task(db: Session, task: TaskCreate):
-    db_task = Task(id='1', title=task.title, content=task.content, done=False)
+    db_task = Task(title=task.title, content=task.content, done=False)
     db.add(db_task)
     db.commit()
     db.refresh(db_task)

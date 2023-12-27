@@ -5,7 +5,7 @@ from database import Base
 class Task(Base):
     __tablename__ = "tasks"
     
-    id = Column(String, primary_key=True, index=True)  
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     title = Column(String, index=False)
     content = Column(String, index=False)
     done = Column(Boolean, index=False)
